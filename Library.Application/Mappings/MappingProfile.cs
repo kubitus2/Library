@@ -9,11 +9,9 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<User, UserDto>()
-            .ForMember(dest => dest.Name, opt
-                => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"));
+        CreateMap<User, UserDto>();
         CreateMap<List<User>, GetUsersResponse>()
             .ConvertUsing(src 
-                => new GetUsersResponse(src.Select(user => new UserDto(user.Id, $"{user.FirstName} {user.LastName}", user.Email)).ToList()));
+                => new GetUsersResponse(src.Select(user => new UserDto(user.Id, user.FirstName, user.LastName, user.Email, user.Phone, user.IsBlocked)).ToList()));
     }
 }

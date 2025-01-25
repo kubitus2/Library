@@ -1,0 +1,35 @@
+﻿@model Library.Contracts.Responses.GetUsersResponse
+
+@{
+    ViewData["Title"] = "Użytkownicy";
+}
+<h1>@ViewData["Title"]</h1>
+<br/>
+<br/>
+<button class="float-end">Dodaj użytkownika</button>
+<table>
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Imię i nazwisko</th>
+        <th>Email</th>
+        <th>Telefon</th>
+        <th>Zablokowano wypożyczanie</th>
+        <th colspan="2">Akcje</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var user in Model.dtos)
+    {
+        <tr>
+            <td>@user.Id</td>
+            <td>@($"{user.FirstName} {user.LastName}")</td>
+            <td>@user.Email</td>
+            <td>@user.PhoneNumber</td>
+            <td>@(user.IsLocked ? "TAK" : "NIE")</td>
+            <td><button>Edytuj</button></td>
+            <td><button>Usuń</button></td>
+        </tr>
+    }
+    </tbody>
+</table>

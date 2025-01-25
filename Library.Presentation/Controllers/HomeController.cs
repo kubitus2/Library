@@ -22,17 +22,6 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-
-    public async Task<IActionResult> Users(CancellationToken token)
-    {
-        var users = await _mediator.Send(new GetUsersQuery(), token);
-        return View(users);
-    }
-
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

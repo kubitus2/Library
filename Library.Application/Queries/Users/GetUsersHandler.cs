@@ -19,7 +19,7 @@ public class GetUsersHandler : IRequestHandler<GetUsersQuery, GetUsersResponse>
 
     public async Task<GetUsersResponse> Handle(GetUsersQuery request, CancellationToken cancellationToken)
     {
-        var users = await _context.Users.ToListAsync(cancellationToken);
+        var users = await _context.Users.FromSqlRaw("GetAllUsersTest").ToListAsync(); //.ToListAsync(cancellationToken);
         return _mapper.Map<GetUsersResponse>(users);
     }
 }
