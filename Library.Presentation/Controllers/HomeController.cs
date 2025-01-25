@@ -1,16 +1,20 @@
 using System.Diagnostics;
+using Library.Application.Queries.Users;
 using Microsoft.AspNetCore.Mvc;
 using Library.Presentation.Models;
+using MediatR;
 
 namespace Library.Presentation.Controllers;
 
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly IMediator _mediator;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, IMediator mediator)
     {
         _logger = logger;
+        _mediator = mediator;
     }
 
     public IActionResult Index()
@@ -21,6 +25,12 @@ public class HomeController : Controller
     public IActionResult Privacy()
     {
         return View();
+    }
+
+    public async Task<IActionResult> Users(CancellationToken token)
+    {
+        var users = await _mediator.Send(new GetUsersQuery(), token);
+        return View(users);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
