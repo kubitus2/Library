@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Security.Cryptography;
+using AutoMapper;
 using Library.Contracts.DTOs;
 using Library.Contracts.Responses;
 using Library.Infrastructure;
@@ -12,6 +13,6 @@ public class MappingProfile : Profile
         CreateMap<User, UserDto>();
         CreateMap<List<User>, GetUsersResponse>()
             .ConvertUsing(src 
-                => new GetUsersResponse(src.Select(user => new UserDto(user.Id, user.FirstName, user.LastName, user.Email, user.Phone, user.IsBlocked)).ToList()));
+                => new GetUsersResponse(src.Select(user => new UserDto(user.Id, user.FirstName!, user.LastName!, user.Email, user.Phone, user.IsBlocked)).ToList()));
     }
 }

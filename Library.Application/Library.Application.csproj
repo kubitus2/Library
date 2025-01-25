@@ -13,10 +13,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Commands\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\Library.Contracts\Library.Contracts.csproj" />
       <ProjectReference Include="..\Library.Infrastructure\Library.Infrastructure.csproj" />
     </ItemGroup>
