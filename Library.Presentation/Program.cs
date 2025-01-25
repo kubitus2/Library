@@ -1,3 +1,4 @@
+using Library.Application;
 using Library.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,7 +10,7 @@ builder.Services.AddDbContext<LibraryDbContext>(opt =>
 {
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection"));
 });
-
+builder.Services.AddApplication();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
