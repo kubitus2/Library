@@ -6,7 +6,8 @@ namespace Library.Presentation.Handlers;
 
 public class ExceptionHandler : IExceptionHandler
 {
-    public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
+    public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception,
+        CancellationToken cancellationToken)
     {
         var problemDetails = CreateProblemDetails(exception);
         httpContext.Response.StatusCode = problemDetails.Status ?? StatusCodes.Status500InternalServerError;
@@ -29,7 +30,7 @@ public class ExceptionHandler : IExceptionHandler
         {
             problemDetails.Extensions["errors"] = validationException.ValidationErros;
         }
-        
+
         return problemDetails;
     }
 

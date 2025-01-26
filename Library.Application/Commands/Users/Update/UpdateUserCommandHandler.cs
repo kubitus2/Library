@@ -14,7 +14,7 @@ public class UpdateUserCommandHandler : IRequestHandler<Update.UpdateUserCommand
     {
         _context = context;
     }
-    
+
     public async Task<Response> Handle(Update.UpdateUserCommand request, CancellationToken cancellationToken)
     {
         var userToUpdate = await _context.Users.FirstOrDefaultAsync(u => u.Id == request.Id);
@@ -26,10 +26,10 @@ public class UpdateUserCommandHandler : IRequestHandler<Update.UpdateUserCommand
         userToUpdate.LastName = request.LastName;
         userToUpdate.Email = request.Email;
         userToUpdate.Phone = request.Phone;
-        
+
         _context.Users.Update(userToUpdate);
         await _context.SaveChangesAsync(cancellationToken);
-        
+
         return Response.Success();
     }
 }

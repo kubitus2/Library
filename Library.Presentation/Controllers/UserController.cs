@@ -103,7 +103,7 @@ namespace Library.Presentation.Controllers
 
             if (!response.Succeeded)
                 RedirectToAction($"{response.StatusCode}", "Error");
-            
+
             return RedirectToAction(nameof(Index));
         }
     }

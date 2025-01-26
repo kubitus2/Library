@@ -14,11 +14,12 @@ public class CreateUserCommandHandler : IRequestHandler<Create.CreateUserCommand
         _context = context;
         _mapper = mapper;
     }
+
     public async Task<int> Handle(Create.CreateUserCommand request, CancellationToken cancellationToken)
     {
         var user = _mapper.Map<User>(request);
         user.IsActive = true;
-        
+
         await _context.Users.AddAsync(user, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
         return user.Id;

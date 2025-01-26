@@ -22,16 +22,16 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Respo
 
         if (!canDelete)
             return Response.Fail("User does not exist", 404);
-        
+
         var userToDelete = await _context.Users.FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
-        
-        if(userToDelete is null)
+
+        if (userToDelete is null)
             return Response.Fail("User not found");
-        
+
         userToDelete.IsActive = false;
         _context.Users.Update(userToDelete);
         await _context.SaveChangesAsync(cancellationToken);
-        
+
         return Response.Success();
     }
 
@@ -40,7 +40,7 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Respo
         var hasOutstandingCheckouts = await _context
             .Checkouts.AnyAsync(c => c.UserId == request.Id && c.ReturnedDate == null);
         var hasUnpaidFees = await _context.Fees.AnyAsync(f => f.UserId == request.Id && !f.Paid);
-        
+
         return !hasOutstandingCheckouts && !hasUnpaidFees;
     }
 }

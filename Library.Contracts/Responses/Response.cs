@@ -8,7 +8,7 @@ public class Response
 
     public static Response Success()
     {
-        return new Response { Succeeded = true, StatusCode = 200};
+        return new Response { Succeeded = true, StatusCode = 200 };
     }
 
     public static Response Fail(string message, int code = 500)
@@ -28,6 +28,6 @@ public class Response<T> : Response
 
     public static Response<T> Fail(string message, int code = 500)
     {
-        return new Response<T> { Succeeded = false, Message = message, StatusCode = code};
+        return new Response<T> { Succeeded = false, Message = message, StatusCode = code };
     }
 }

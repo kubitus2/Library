@@ -18,7 +18,7 @@ public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, Respons
         _dbContext = dbContext;
         _mapper = mapper;
     }
-    
+
     public async Task<Response<UserDto>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
         var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == request.Id && u.IsActive, cancellationToken);
@@ -26,6 +26,6 @@ public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, Respons
         if (user is null)
             return Response<UserDto>.Fail("User not found", 404);
 
-        return  Response<UserDto>.Success(_mapper.Map<UserDto>(user));
+        return Response<UserDto>.Success(_mapper.Map<UserDto>(user));
     }
 }

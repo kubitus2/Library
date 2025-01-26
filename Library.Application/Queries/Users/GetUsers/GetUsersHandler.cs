@@ -23,9 +23,9 @@ public class GetUsersHandler : IRequestHandler<GetUsersQuery, Response<ICollecti
         var users = await _context.Users
             .Where(u => u.IsActive)
             .ToListAsync(cancellationToken);
-        
+
         var userDtos = users.Select(u => _mapper.Map<UserDto>(u)).ToList();
-             
+
         return Response<ICollection<UserDto>>.Success(userDtos);
     }
 }

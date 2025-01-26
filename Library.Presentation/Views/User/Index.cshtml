@@ -10,27 +10,28 @@
 </p>
 <table class="table">
     <thead>
-        <tr>
-            <th>
-                Imię
-            </th>
-            <th>
-                Nazwisko
-            </th>
-            <th>
-                E-mail
-            </th>
-            <th>
-                Numer telefonu
-            </th>
-            <th>
-                Zablokowany
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>
+            Imię
+        </th>
+        <th>
+            Nazwisko
+        </th>
+        <th>
+            E-mail
+        </th>
+        <th>
+            Numer telefonu
+        </th>
+        <th>
+            Zablokowany
+        </th>
+        <th></th>
+    </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var item in Model)
+    {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.FirstName)
@@ -53,6 +54,6 @@
                 <a asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>
