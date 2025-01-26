@@ -201,6 +201,8 @@ public partial class LibraryDbContext : DbContext
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
                 .HasColumnName("description");
+            entity.Property(e => e.Paid).HasColumnName("paid")
+                .HasDefaultValue(false);
             entity.Property(e => e.FeeType).HasColumnName("feeType");
             entity.Property(e => e.UserId).HasColumnName("userId");
 

@@ -16,6 +16,7 @@ public partial class Fee
     public int UserId { get; set; }
 
     public string? Description { get; set; }
+    public bool Paid { get; set; }
 
     public virtual Checkout Checkout { get; set; } = null!;
 
