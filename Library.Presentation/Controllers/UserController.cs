@@ -39,7 +39,7 @@ namespace Library.Presentation.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            var response = Response<UserDto>.Fail("", 404); //await _mediator.Send(new GetUserByIdQuery(id));
+            var response = await _mediator.Send(new GetUserByIdQuery(id));
 
             if (!response.Succeeded)
                 return RedirectToAction($"{response.StatusCode}", "Error");
