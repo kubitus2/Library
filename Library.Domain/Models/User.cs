@@ -16,6 +16,7 @@ public partial class User
     public string Phone { get; set; } = null!;
 
     public bool IsBlocked { get; set; }
+    public bool IsActive { get; set; }
 
     public virtual ICollection<Checkout> Checkouts { get; set; } = new List<Checkout>();
 

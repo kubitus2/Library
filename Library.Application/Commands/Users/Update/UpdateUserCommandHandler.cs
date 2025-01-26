@@ -20,10 +20,10 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Unit>
         if (userToUpdate is null)
             throw new Exception();
 
-        userToUpdate.FirstName = request.Firstname;
-        userToUpdate.LastName = request.Lastname;
+        userToUpdate.FirstName = request.FirstName;
+        userToUpdate.LastName = request.LastName;
         userToUpdate.Email = request.Email;
-        userToUpdate.Phone = request.PhoneNumber;
+        userToUpdate.Phone = request.Phone;
         
         _context.Users.Update(userToUpdate);
         await _context.SaveChangesAsync(cancellationToken);

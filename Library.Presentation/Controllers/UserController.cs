@@ -2,126 +2,91 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Library.Application.Commands.Users.CreateUserCommand;
+using Library.Application.Commands.Users.Delete;
+using Library.Application.Commands.Users.UpdateUserCommand;
+using Library.Application.Queries.Users;
+using Library.Application.Queries.Users.GetUserById;
+using Library.Contracts.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Library.Infrastructure;
+using MediatR;
+using Microsoft.CodeAnalysis.Elfie.Serialization;
 
 namespace Library.Presentation.Controllers
 {
     public class UserController : Controller
     {
         private readonly LibraryDbContext _context;
+        private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
 
-        public UserController(LibraryDbContext context)
+        public UserController(LibraryDbContext context, IMediator mediator, IMapper mapper)
         {
             _context = context;
+            _mediator = mediator;
+            _mapper = mapper;
         }
 
-        // GET: User
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Users.ToListAsync());
+            var users = await _mediator.Send(new GetUsersQuery());
+            return View(users.Data);
         }
 
-        // GET: User/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var response = await _mediator.Send(new GetUserByIdQuery(id));
 
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
+            if (!response.Succeeded)
+                return NotFound(response.Message);
 
-            return View(user);
+            return View(response.Data);
         }
 
-        // GET: User/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: User/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Email,Phone,IsBlocked")] User user)
+        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Email,Phone")] CreateUserDto user)
         {
-            if (!ModelState.IsValid) 
+            if (!ModelState.IsValid)
                 return View(user);
-            
-            _context.Add(user);
-            await _context.SaveChangesAsync();
+
+            var response = await _mediator.Send(new CreateUserCommand(user));
+
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: User/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
+            var response = await _mediator.Send(new GetUserByIdQuery(id));
+            if (!response.Succeeded)
                 return NotFound();
-            }
-
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return View(user);
+            
+            return View(_mapper.Map<UpdateUserDto>(response.Data));
         }
 
-        // POST: User/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Email,Phone,IsBlocked")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Email,Phone")] UpdateUserDto user)
         {
-            if (id != user.Id)
-            {
-                return NotFound();
-            }
+            if (!ModelState.IsValid)
+                return View(user);
+            
+            await _mediator.Send(new UpdateUserCommand(user));
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UserExists(user.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(user);
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: User/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var user = await _context.Users
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (user == null)
@@ -132,24 +97,15 @@ namespace Library.Presentation.Controllers
             return View(user);
         }
 
-        // POST: User/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user != null)
-            {
-                _context.Users.Remove(user);
-            }
-
-            await _context.SaveChangesAsync();
+            var response = await _mediator.Send(new DeleteUserCommand(id));
+            if (!response.Succeeded)
+                return BadRequest(response.Message);
+            
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool UserExists(int id)
-        {
-            return _context.Users.Any(e => e.Id == id);
         }
     }
 }
