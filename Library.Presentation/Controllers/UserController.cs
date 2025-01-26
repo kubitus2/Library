@@ -9,6 +9,8 @@ using Library.Application.Commands.Users.Update;
 using Library.Application.Queries.Users;
 using Library.Application.Queries.Users.GetUserById;
 using Library.Contracts.DTOs;
+using Library.Contracts.Exceptions;
+using Library.Contracts.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,13 +22,11 @@ namespace Library.Presentation.Controllers
 {
     public class UserController : Controller
     {
-        private readonly LibraryDbContext _context;
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
 
-        public UserController(LibraryDbContext context, IMediator mediator, IMapper mapper)
+        public UserController(IMediator mediator, IMapper mapper)
         {
-            _context = context;
             _mediator = mediator;
             _mapper = mapper;
         }
@@ -39,10 +39,10 @@ namespace Library.Presentation.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            var response = await _mediator.Send(new GetUserByIdQuery(id));
+            var response = Response<UserDto>.Fail("", 404); //await _mediator.Send(new GetUserByIdQuery(id));
 
             if (!response.Succeeded)
-                return NotFound(response.Message);
+                return RedirectToAction($"{response.StatusCode}", "Error");
 
             return View(response.Data);
         }
@@ -59,7 +59,7 @@ namespace Library.Presentation.Controllers
             if (!ModelState.IsValid)
                 return View(user);
 
-            var response = await _mediator.Send(new CreateUserCommand(user));
+            await _mediator.Send(new CreateUserCommand(user));
 
             return RedirectToAction(nameof(Index));
         }
@@ -67,9 +67,10 @@ namespace Library.Presentation.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var response = await _mediator.Send(new GetUserByIdQuery(id));
+
             if (!response.Succeeded)
-                return NotFound();
-            
+                return RedirectToAction($"{response.StatusCode}", "Error");
+
             return View(_mapper.Map<UpdateUserDto>(response.Data));
         }
 
@@ -79,7 +80,7 @@ namespace Library.Presentation.Controllers
         {
             if (!ModelState.IsValid)
                 return View(user);
-            
+
             await _mediator.Send(new UpdateUserCommand(user));
 
             return RedirectToAction(nameof(Index));
@@ -87,14 +88,11 @@ namespace Library.Presentation.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
+            var response = await _mediator.Send(new GetUserByIdQuery(id));
+            if (!response.Succeeded)
+                return RedirectToAction($"{response.StatusCode}", "Error");
 
-            return View(user);
+            return View(response.Data);
         }
 
         [HttpPost, ActionName("Delete")]
@@ -102,8 +100,9 @@ namespace Library.Presentation.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var response = await _mediator.Send(new DeleteUserCommand(id));
+
             if (!response.Succeeded)
-                return BadRequest(response.Message);
+                RedirectToAction($"{response.StatusCode}", "Error");
             
             return RedirectToAction(nameof(Index));
         }

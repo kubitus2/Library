@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Library.Contracts.DTOs;
+using Library.Contracts.Exceptions;
 using Library.Contracts.Responses;
 using Library.Infrastructure;
 using MediatR;
@@ -23,7 +24,7 @@ public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, Respons
         var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == request.Id && u.IsActive, cancellationToken);
 
         if (user is null)
-            Response<UserDto>.Fail("User not found");
+            return Response<UserDto>.Fail("User not found", 404);
 
         return  Response<UserDto>.Success(_mapper.Map<UserDto>(user));
     }

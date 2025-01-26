@@ -1,4 +1,5 @@
 ﻿using Library.Contracts.DTOs;
+using Library.Contracts.Exceptions;
 using Library.Contracts.Responses;
 using Library.Infrastructure;
 using MediatR;
@@ -20,7 +21,7 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Respo
         var canDelete = await CanUserBeDeleted(request);
 
         if (!canDelete)
-            return Response.Fail("User has outstanding fees/checkouts");
+            return Response.Fail("User does not exist", 404);
         
         var userToDelete = await _context.Users.FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
         
