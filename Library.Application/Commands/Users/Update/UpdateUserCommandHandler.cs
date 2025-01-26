@@ -2,9 +2,9 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Library.Application.Commands.Users.UpdateUserCommand;
+namespace Library.Application.Commands.Users.Update;
 
-public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Unit>
+public class UpdateUserCommandHandler : IRequestHandler<Update.UpdateUserCommand, Unit>
 {
     private readonly LibraryDbContext _context;
 
@@ -13,7 +13,7 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Unit>
         _context = context;
     }
     
-    public async Task<Unit> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(Update.UpdateUserCommand request, CancellationToken cancellationToken)
     {
         var userToUpdate = await _context.Users.FirstOrDefaultAsync(u => u.Id == request.Id);
 

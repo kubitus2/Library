@@ -1,7 +1,7 @@
 ﻿using Library.Contracts.DTOs;
 using MediatR;
 
-namespace Library.Application.Commands.Users.CreateUserCommand;
+namespace Library.Application.Commands.Users.Create;
 
 public record CreateUserCommand(CreateUserDto dto) : IRequest<int>
 {

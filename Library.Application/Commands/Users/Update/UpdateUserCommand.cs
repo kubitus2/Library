@@ -1,7 +1,7 @@
 ﻿using Library.Contracts.DTOs;
 using MediatR;
 
-namespace Library.Application.Commands.Users.UpdateUserCommand;
+namespace Library.Application.Commands.Users.Update;
 
 public record UpdateUserCommand(UpdateUserDto dto) : IRequest<Unit>
 {

@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 using AutoMapper;
-using Library.Application.Commands.Users.CreateUserCommand;
+using Library.Application.Commands.Users.Create;
 using Library.Contracts.DTOs;
 using Library.Contracts.Responses;
 using Library.Infrastructure;
