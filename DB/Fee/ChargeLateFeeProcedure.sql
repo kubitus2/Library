@@ -17,7 +17,7 @@ BEGIN
 
 		WHILE @@FETCH_STATUS = 0
 		BEGIN
-			SET @lateDays = DATEDIFF(DAY, DATEADD(MONTH, 1, @borrowDate), @currentDate);
+			SET @lateDays = DATEDIFF(DAY, DATEADD(DAY, 30, @borrowDate), @currentDate);
 			SET @lateFee = CONVERT(DECIMAL(10, 2), @lateDays) * 1.5;
 
 			IF NOT EXISTS (SELECT 1 FROM fee WHERE checkoutId = @checkoutId AND feeType = 2)
