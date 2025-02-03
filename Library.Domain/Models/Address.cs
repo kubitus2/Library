@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Library.Infrastructure;
+namespace Library.Models;
 
 public partial class Address
 {

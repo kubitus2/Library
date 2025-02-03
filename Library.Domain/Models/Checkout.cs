@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Library.Domain.Models;
 
-namespace Library.Infrastructure;
+namespace Library.Models;
 
 public partial class Checkout
 {

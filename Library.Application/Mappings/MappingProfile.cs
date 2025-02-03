@@ -3,7 +3,8 @@ using AutoMapper;
 using Library.Application.Commands.Users.Create;
 using Library.Contracts.DTOs;
 using Library.Contracts.Responses;
-using Library.Infrastructure;
+using Library.Domain.Models;
+using Library.Models;
 
 namespace Library.Application.Mappings;
 

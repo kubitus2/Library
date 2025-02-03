@@ -14,7 +14,7 @@ using Library.Contracts.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Library.Infrastructure;
+using Library.Models;
 using MediatR;
 using Microsoft.CodeAnalysis.Elfie.Serialization;
 

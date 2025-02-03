@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Library.Domain.Models;
+using Library.Domain.Repositories;
+using Library.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Infrastructure;
 
-public partial class LibraryDbContext : DbContext
+public partial class LibraryDbContext : DbContext, IUnitOfWork
 {
     public LibraryDbContext()
     {
@@ -35,7 +36,7 @@ public partial class LibraryDbContext : DbContext
 
     public virtual DbSet<OrderDetail> OrderDetails { get; set; }
 
-    public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<User?> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -313,4 +314,8 @@ public partial class LibraryDbContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+    public async Task<int> SaveChangesAsync(CancellationToken token)
+    {
+        return await base.SaveChangesAsync(token);
+    }
 }

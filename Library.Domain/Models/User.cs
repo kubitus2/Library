@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Library.Models;
 
-namespace Library.Infrastructure;
+namespace Library.Domain.Models;
 
 public partial class User
 {
