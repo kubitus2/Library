@@ -22,10 +22,9 @@ public class CreateUserCommandHandler : IRequestHandler<Create.CreateUserCommand
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<int> Handle(Create.CreateUserCommand request, CancellationToken cancellationToken)
+    public async Task<int> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
         var user = _mapper.Map<User>(request);
-        user.IsActive = true;
 
         await _repository.Add(user, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);

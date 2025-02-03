@@ -1,4 +1,6 @@
-﻿using Library.Contracts.Responses;
+﻿using Library.Application.Helpers;
+using Library.Contracts.Responses;
+using Library.Domain.Models;
 using Library.Domain.Repositories;
 using Library.Infrastructure;
 using MediatR;
@@ -20,19 +22,21 @@ public class UpdateUserCommandHandler : IRequestHandler<Update.UpdateUserCommand
         _repository = repository;
     }
 
-    public async Task<Response> Handle(Update.UpdateUserCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
         var userToUpdate = await _repository.GetById(request.Id, cancellationToken);
 
         if (userToUpdate is null)
             return Response.Fail("Not found", 404);
 
-        userToUpdate.FirstName = request.FirstName;
-        userToUpdate.LastName = request.LastName;
-        userToUpdate.Email = request.Email;
-        userToUpdate.Phone = request.Phone;
+        User updatedUser = new UserBuilder()
+            .Copy(userToUpdate)
+            .WithFirstName(request.FirstName)
+            .WithLastName(request.LastName)
+            .WithEmail(request.Email)
+            .WithPhone(request.Phone);
 
-        _repository.Update(userToUpdate);
+        _repository.Update(updatedUser);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return Response.Success();

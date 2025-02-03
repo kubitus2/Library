@@ -1,10 +1,7 @@
-﻿using System.Security.Cryptography;
-using AutoMapper;
+﻿using AutoMapper;
 using Library.Application.Commands.Users.Create;
 using Library.Contracts.DTOs;
-using Library.Contracts.Responses;
 using Library.Domain.Models;
-using Library.Models;
 
 namespace Library.Application.Mappings;
 
@@ -13,7 +10,10 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<User, UserDto>();
-        CreateMap<CreateUserCommand, User>();
+        CreateMap<CreateUserCommand, User>()
+            .ForMember(u => u.IsActive, 
+                opt 
+                    => opt.MapFrom(src => true));
         CreateMap<UserDto, UpdateUserDto>();
     }
 }
