@@ -4,7 +4,7 @@ BEGIN
 	BEGIN TRANSACTION;
 
 	BEGIN TRY
-		DECLARE @checkoutId INT, @userId INT, @borrowDate DATE, @currentDate DATE, @lateDays INT, @lateFee DECIMAL
+		DECLARE @checkoutId INT, @userId INT, @borrowDate DATE, @currentDate DATE, @lateDays INT, @lateFee DECIMAL(10, 2)
 		SET @currentDate = GETDATE();
 
 		DECLARE checkout_cursor CURSOR FOR
@@ -18,7 +18,7 @@ BEGIN
 		WHILE @@FETCH_STATUS = 0
 		BEGIN
 			SET @lateDays = DATEDIFF(DAY, DATEADD(MONTH, 1, @borrowDate), @currentDate);
-			SET @lateFee = 1.5 * @lateDays;
+			SET @lateFee = CONVERT(DECIMAL(10, 2), @lateDays) * 1.5;
 
 			IF NOT EXISTS (SELECT 1 FROM fee WHERE checkoutId = @checkoutId AND feeType = 2)
 			BEGIN
